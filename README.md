@@ -12,6 +12,10 @@ Hybrid는 Channel->INAPP 으로 설정한다.<br>
  ![new app](./img/channel.png)
 4. unit을 생성 후, Unitid(TAG_ID)를 이용하여 Adtag 연동을 진행합니다.<br>
  ![new app](./img/unit.png)
+ 
+5. Passback 설정(선택) <br>
+광고가 없을시 아래와 같이 설정된 Passback 코드가 적용 됩니다.<br>
+ ![new app](./img/passback.png)
 
 
 > 헤더와 헤더 사이 혹은 가장 먼저 넣습니다.
@@ -61,6 +65,7 @@ Hybrid는 Channel->INAPP 으로 설정한다.<br>
 initAdBanner | O | 배너를 초기화한다. tagid, width, height, ad_container 순으로넘겨줍니다. | 
 loadAd | O | 광고를 요청한다. 만약 결과를 받고 싶으면 setResponseCallback 를 사용하면 된다. | 
 setResponseCallback | | 콜백함수를 지원한다. OK, NOBID, ERROR 를 리턴해준다. | 
+setPassbackFunc | | 로컬 Passback 함수를 설정한다. 설정시 서버 설정 패스백이 무시된다. | setPassbackFunc(ExelbidPassback_abcdefg);
 setYob |  | 유저의 테어난 년도를 알고 있다면 입력한다. | setYob('1990')
 setGender |  | 유저의 성별을 알고 있다면 입력한다. M,F 만 지원한다. | setGender('M')
 addKeyword |  | 자체 세그먼트가 존재한다면 Key-Value 형태로 넣는다. | addKeyword('favorite', 'golf')
@@ -106,6 +111,13 @@ setGeo |  | LAT_LONG_KEY (latitude,longitude) 위도, 경도 | setGeo('35.245622
                 console.log('ERROR');
             }
         };
+        
+        /*
+        function ExelbidResponseCallback_abcdefg(){
+            // local passback 을 설정하면 서버의 설정이 무시됩니다.
+            // TODO
+        };
+        */
         exelbidtag.push(function () {
             exelbidtag.initAdBanner('abcdefg', 320, 50, 'div-exelbid-abcdefg')
                 .setYob('1976')
@@ -113,6 +125,7 @@ setGeo |  | LAT_LONG_KEY (latitude,longitude) 위도, 경도 | setGeo('35.245622
                 .addKeyword('target1', 'value1')
                 .addKeyword('target2', 'value2')
                 .setResponseCallback(ExelbidResponseCallback_abcdefg)
+		        //.setPassbackFunc(ExelbidPassback_abcdefg);
                 .setTestMode(true);
         });
     </script>
