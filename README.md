@@ -113,9 +113,11 @@ setGeo |  | LAT_LONG_KEY (latitude,longitude) 위도, 경도 | setGeo('35.245622
         };
         
         /*
-        function ExelbidResponseCallback_abcdefg(){
-            // local passback 을 설정하면 서버의 설정이 무시됩니다.
+        // local passback 을 설정하면 서버의 설정이 무시됩니다.
+        // Passback 함수 - setResponseCallback(ExelbidPassback_abcdefg)와 같이 설정
+        function ExelbidPassback_abcdefg(){
             // TODO
+            // document.getElementById('div-exelbid-abcdefg').innerHTML = "<iframe src='http://xxx.com/banner/passback.html?a=5' scrolling='no' frameborder='0' width='100%' height='450px'>";
         };
         */
         exelbidtag.push(function () {
