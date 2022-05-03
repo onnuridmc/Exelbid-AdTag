@@ -272,9 +272,9 @@ public class MainActivity {
                 adunit.setGeo(mysdk.getLat(), mysdk.getLon());
         });
     </script>
-    <div>
-        <p>아래가 광고 영역입니다.</p>
-    </div>
+        <!--
+        #div-exelbid-abcdefg 의 영역이 광고 영역입니다.
+        -->
     <div id='div-exelbid-abcdefg' style="width: 320px; height:50px;">
         <script type='text/javascript'>
             exelbidtag.push(function () {
@@ -355,9 +355,11 @@ public class MainActivity {
                 adunit.setGeo(mysdk.getLat(), mysdk.getLon());
         });
     </script>
-    <div>
-        <p>아래가 광고 영역입니다. 광고영역이 가변값이라면 div에 height를 설정하지 마시기 바랍니다. </p>
-    </div>
+
+    <!--
+        #div-exelbid-abcdefg 의 영역이 광고 영역입니다.
+        광고영역의 Width값이 가변적이라면 div에 Height 속성을 설정하지 마시길 바랍니다.
+    -->
     <div id='div-exelbid-abcdefg' style="width: 100%;">
         <script type='text/javascript'>
             exelbidtag.push(function () {
