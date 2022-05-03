@@ -127,7 +127,7 @@ setGeo |  | LAT_LONG_KEY (latitude,longitude) 위도, 경도 | setGeo('35.245622
                 .addKeyword('target1', 'value1')
                 .addKeyword('target2', 'value2')
                 .setResponseCallback(ExelbidResponseCallback_abcdefg)
-		        //.setPassbackFunc(ExelbidPassback_abcdefg);
+                //.setPassbackFunc(ExelbidPassback_abcdefg);
                 .setTestMode(true);
         });
     </script>
@@ -205,22 +205,22 @@ public class MainActivity {
     }
 }
 ```
-3. Hybrid일 경우 tagid : "abcdefg", width : 320, height : 50 이고 javascriptinterface를 이용하여 데이타 관련 함수를 전부 썼을때에는 아래와 같습니다.
+3-1. Hybrid지면의 영역이 고정값(불변값)인 경우
+ - width, height 값이 고정값(px)인 경우 javascriptinterface를 이용하여 데이타 관련 함수를 전부 썼을때에는 아래와 같습니다.
+
+- ex) tagid : "abcdefg", width : 320px, height : 50px
 ```html
 <html>
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <script type='text/javascript'>
-        !function (w, d, s, u, t, ss, fs) {
-            if (w.exelbidtag) return; t = w.exelbidtag = {}; if (!window.t) window.t = t;
-            t.push = function () {
-                t.callFunc ? t.callFunc.apply(t, arguments) :
-                    t.cmd.push(arguments);
-            };
-            t.cmd = []; ss = document.createElement(s); ss.async = !0; ss.src = u;
-            fs = d.getElementsByTagName(s)[0]; fs.parentNode.insertBefore(ss, fs);
-        }(window, document, 'script', '//st2.exelbid.com/js/ads.js');
+          !function (w,d,s,u,t,ss,fs) {
+            if(w.exelbidtag)return;t=w.exelbidtag={};if(!window.t) window.t = t;
+            t.push = function() {t.callFunc?t.callFunc.apply(t,arguments) : t.cmd.push(arguments);};
+            t.cmd=[];ss = document.createElement(s);ss.async=!0;ss.src=u;
+            fs=d.getElementsByTagName(s)[0];fs.parentNode.insertBefore(ss,fs);
+        }(window,document,'script','//st2.exelbid.com/js/ads.js');
     </script>
 </head>
 
@@ -238,7 +238,7 @@ public class MainActivity {
                 //TODO 기타 에러
             }
         };
-        
+
         exelbidtag.push(function () {
             var adunit = exelbidtag.initAdBanner('abcdefg', 320, 50, 'div-exelbid-abcdefg')
                 .setResponseCallback(MyResponse)
@@ -273,9 +273,92 @@ public class MainActivity {
         });
     </script>
     <div>
-        <p>아래가 광고 영역입니다. </p>
+        <p>아래가 광고 영역입니다.</p>
     </div>
-    <div id='div-exelbid-abcdefg' style="width: 320px;height: 50px;">
+    <div id='div-exelbid-abcdefg' style="width: 320px; height:50px;">
+        <script type='text/javascript'>
+            exelbidtag.push(function () {
+                exelbidtag.loadAd('abcdefg');
+            });
+        </script>
+    </div>
+</body>
+
+</html>
+```
+
+3-2. Hybrid지면의 영역이 가변값인 경우
+ - width 값이 가변값(%)인 경우 javascriptinterface를 이용하여 데이타 관련 함수를 전부 썼을때에는 아래와 같습니다. &nbsp; 단, height값은 고정값으로 들어가야 합니다.
+
+- ex) tagid : "abcdefg", width : 100%, height : 200px
+
+```html
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script type='text/javascript'>
+          !function (w,d,s,u,t,ss,fs) {
+            if(w.exelbidtag)return;t=w.exelbidtag={};if(!window.t) window.t = t;
+            t.push = function() {t.callFunc?t.callFunc.apply(t,arguments) : t.cmd.push(arguments);};
+            t.cmd=[];ss = document.createElement(s);ss.async=!0;ss.src=u;
+            fs=d.getElementsByTagName(s)[0];fs.parentNode.insertBefore(ss,fs);
+        }(window,document,'script','//st2.exelbid.com/js/ads.js');
+    </script>
+</head>
+
+<body>
+    <script type='text/javascript'>
+        function MyResponse(result) {
+            // alert('status :' + status);
+            if (result.status == 'OK') {
+                //TODO 광고 처리 됨
+            } else if (result.status == 'NOBID') {
+                //TODO 광고없음
+            } else if (result.status == 'PASSBACK') {
+                //TODO PASSBACK
+            } else if (result.status == 'ERROR') {
+                //TODO 기타 에러
+            }
+        };
+
+        exelbidtag.push(function () {
+            var adunit = exelbidtag.initAdBanner('abcdefg', 100%, 200, 'div-exelbid-abcdefg')
+                .setResponseCallback(MyResponse)
+                .setIsInApp(true); // 이것은 특별히 inapp 인 경우 반드시 해줘야 합니다. 
+
+            adunit.setIfa(mysdk.getIfa()); // ifa(gaid or idfa) 가 없는 경우는 입찰이 거의 들어오지 않습니다.
+
+            if (mysdk.isCoppa())
+                adunit.setCoppa(true);
+            if (mysdk.hasYob()) // ex) 1990
+                adunit.setYob(mysdk.getYob());
+            if (mysdk.hasGender()) // ex) F, M
+                adunit.setGender(mysdk.getGender());
+            if (mysdk.hasSegment()) // ex) seg1, 0012
+                adunit.addKeyword(mysdk.getSegmentKey(), mysdk.getSegmentValue());
+            if (mysdk.hasMobileCountryCode()) // ex 450
+                adunit.setMobileCountryCode(mysdk.getMobileCountryCode());
+            if (mysdk.hasMobileNetworkCode()) // ex 05
+                adunit.setMobileNetworkCode(mysdk.getMobileNetworkCode());
+            if (mysdk.hasCountryIso()) // ex kr
+                adunit.setCountryIso(mysdk.getCountryIso());
+            if (mysdk.hasDeviceModel()) // ex SM-N920K
+                adunit.setDeviceModel(mysdk.getDeviceModel());
+            if (mysdk.hasDeviceMake()) // ex LGE
+                adunit.setDeviceMake(mysdk.getDeviceMake());
+            if (mysdk.hasOsVersion()) // ex 7.0.1
+                adunit.setOsVersion(mysdk.getOsVersion());
+            if (mysdk.hasAppVersion()) // ex 1.0.2
+                adunit.setAppVersion(mysdk.getAppVersion());
+            if (mysdk.hasGeo()) // ex 37.01, 127.501
+                adunit.setGeo(mysdk.getLat(), mysdk.getLon());
+        });
+    </script>
+    <div>
+        <p>아래가 광고 영역입니다. 광고영역이 가변값이라면 div에 height를 설정하지 마시기 바랍니다. </p>
+    </div>
+    <div id='div-exelbid-abcdefg' style="width: 100%;">
         <script type='text/javascript'>
             exelbidtag.push(function () {
                 exelbidtag.loadAd('abcdefg');
