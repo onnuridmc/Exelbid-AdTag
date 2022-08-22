@@ -324,7 +324,7 @@ public class MainActivity {
         };
 
         exelbidtag.push(function () {
-            var adunit = exelbidtag.initAdBanner('abcdefg', 100%, 200, 'div-exelbid-abcdefg')
+            var adunit = exelbidtag.initAdBanner('abcdefg', '100%', 200, 'div-exelbid-abcdefg')
                 .setResponseCallback(MyResponse)
                 .setIsInApp(true); // 이것은 특별히 inapp 인 경우 반드시 해줘야 합니다. 
 
@@ -381,7 +381,8 @@ public class MainActivity {
 > 
 > Javascript에서 Webview의 값을 받으려면 호출될 함수(리시브) 설정이 필요합니다.
 
-### Webview -> Javascript 호출 방법 1번 (문서 로드 시작시, 문서 로드 종료시 실행할 WKUserScript 설정)
+### 1. Webview -> Javascript
+#### 1-1. Webview -> Javascript 호출 방법 1번 (문서 로드 시작시, 문서 로드 종료시 실행할 WKUserScript 설정)
 ```
 WKWebViewConfiguration *webviewConfiguration = [[WKWebViewConfiguration alloc] init];
 WKUserContentController *userContentController = [[WKUserContentController alloc] init];
@@ -400,7 +401,7 @@ self.webView = [[WKWebView alloc] initWithFrame:self.view.frame configuration:we
 ```
 
 
-### Webview -> Javascript 호출 방법 2번 (필요할때 WKWebView evaluateJavaScript 호출)
+#### 1-2. Webview -> Javascript 호출 방법 2번 (필요할때 WKWebView evaluateJavaScript 호출)
 ```
 [self.webView evaluateJavaScript:[NSString stringWithFormat:@"FunctionName('%@')", @"Data"] completionHandler:^(id result, NSError *error) {
     if (error != nil) {    // evaluateJavaScript 에러
@@ -411,7 +412,8 @@ self.webView = [[WKWebView alloc] initWithFrame:self.view.frame configuration:we
 }];
 ```
 
-### Javascript -> Webview 호출 (WKUserContentController 설정)
+### 2. Javascript -> Webview
+#### 2-1. Javascript -> Webview 호출 (WKUserContentController 설정)
 ```
 self.postMessageInterface = [[PostMessageInterface alloc] init];    // PostMessageInterface 생성(커스텀 클래스)
 
@@ -430,7 +432,7 @@ self.webView = [[WKWebView alloc] initWithFrame:self.view.frame configuration:we
 
 
 
-### Javascript -> Webview 호출 WKScriptMessageHandler Delegate 설정 (호출에 대한 리시브 설정 및 예시)
+#### 2-2. Javascript -> Webview 호출 WKScriptMessageHandler Delegate 설정 (호출에 대한 리시브 설정 및 예시)
 > WKUserContentController에 핸들러를 등록하지 않으면 응답받지 않음
 
 ```
@@ -465,7 +467,7 @@ self.webView = [[WKWebView alloc] initWithFrame:self.view.frame configuration:we
 }
 ```
 
-### PostMessageInterface 설정
+### 3. PostMessageInterface 설정
 ```
 @interface PostMessageInterface : NSObject
 
@@ -498,7 +500,7 @@ self.webView = [[WKWebView alloc] initWithFrame:self.view.frame configuration:we
 @end
 ```
 
-### Javascript에서 window.webkit.messageHandlers 호출 (단방향)
+### 4. Javascript에서 window.webkit.messageHandlers 호출 (단방향)
 ```
 if (window.webkit && window.webkit.messageHandlers) {
     window.webkit.messageHandlers.HandlerName.postMessage("Message");
@@ -513,3 +515,166 @@ function FunctionName2(data1, data2) {
     console.log(data1, data2);
 }
 ```
+
+## NATIVE MOBILE WEB
+> MOBILE WEB 지면에서 NATIVE 광고를 적용 할 때<br>
+
+HTML Template 설정
+- adtag 설정은 기존 설정 방법과 똑같고, MOBILE WEB 지면 영역에 맞는 템플릿 별도 설정 해줘야함.
+아래는 예시 샘플 HTML
+ 
+ ```html
+<!DOCTYPE html>
+ <html>
+ 
+ <head>
+   <title>${TITLE}</title>
+   <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+   <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+   <style>
+ 
+     body {
+       margin: 0;
+       border: 0;
+       overflow: hidden;
+     }
+ 
+     #body {
+       position: relative;
+       min-width: 300px;
+       max-width: 500px;
+     }
+ 
+     #optout {
+       position: relative;
+       width: 16px;
+       height: 16px;
+       margin-left: auto;
+       content: url('${OPTOUT_IMG}');
+     }
+ 
+     #main_container{
+       height: 120px;
+       padding: 0 30px;
+       background-color: #f7f7f7;
+       display: flex;
+       align-items: center;
+     }
+ 
+     #icon_wrapper {
+       display: flex;
+       align-items: center;
+       border-radius: 4px;
+       flex: 1;
+     }
+ 
+     #icon_wrapper #icon{
+       width: 56px;
+       height: 56px;
+       background-color: white;
+     }
+ 
+     #title_container{
+       flex: 8;
+       padding: 0 30px;
+       max-width: 70%;
+       min-width: 40%;
+     }
+ 
+     #title_wrapper{
+       display: flex;
+     }
+ 
+     #title_container #title_wrapper #title {
+       font-size: 14px;
+       margin: 0 0 5px 0;
+       overflow: hidden;
+       text-overflow: ellipsis;
+       word-break: keep-all;
+       max-width: 80%;
+     }
+ 
+     #title_container #desc {
+       font-size: 10px;
+       margin: 0;
+       overflow: hidden;
+       text-overflow: ellipsis;
+       word-break: keep-all;
+       display: -webkit-box;
+       -webkit-line-clamp: 2;
+       -webkit-box-orient: vertical;
+     }
+ 
+     #cta_wrapper{
+       flex: 1;
+     }
+     #cta_wrapper #cta{
+       width: 77px;
+       height: 45px;
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       border: none;
+       border-radius: 4px;
+       background-color: #009aff;
+     }
+ 
+     #cta_wrapper #cta:after{
+       content: '${CTATEXT}';
+       color: white;
+       font-weight: bold;
+       overflow: hidden;
+       text-overflow: ellipsis;
+       display: -webkit-box;
+       -webkit-line-clamp: 1;
+       -webkit-box-orient: vertical;
+     }
+ 
+     .overlay {
+       position: absolute;
+       left: 0;
+       top: 0;
+       width: 100%;
+       height: 100%;
+     }
+ 
+   </style>
+ </head>
+ 
+ <body>
+   <div id='body'>
+     <a class='overlay' href='${CLICK_URL}' target='_blank'></a>
+     <div id='main_container'>
+       <div id='icon_wrapper'>
+         <img id='icon' src='${IMG_ICON}' />
+       </div>
+       <div id='title_container'>
+         <div id='title_wrapper'>
+           <h5 id='title'>${TITLE}</h5>
+           <a id='optout' href='${OPTOUT_URL}' target='_blank'></a>
+         </div>
+         <span id='desc'>${DESC}</span>
+       </div>
+       <div id='cta_wrapper'>
+         <button id='cta'></button>
+       </div>
+     </div>
+   </div>
+   <script type='text/javascript'>
+     try{var tags = new Array();var imgs = new Array();tags=[${ADTAG_MACRO_IMPRESSION_TAGS}];for(var i = 0; i < tags.length; i++ ){imgs[i] = new Image();imgs[i].src = tags[i];}}catch(e){}
+   </script>
+ </body>
+ 
+ </html>
+
+ ```
+ Macro 설명
+
+- ${TITLE}  : HTML TITLE 영역
+- ${IMG_ICON} : 광고 아이콘 이미지
+- ${IMG_MAIN} : 광고 메인 이미지
+- ${CLICK_URL} : 광고 클릭 URL
+- ${DESC} : 광고 DESCRIPTION
+- ${CTATEXT} : CTATEXT
+- ${OPTOUT_URL} : OPTOUT URL 
+- ${OPTOUT_IMG} : OPTOUT IMAGE
