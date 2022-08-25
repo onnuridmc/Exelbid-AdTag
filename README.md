@@ -373,6 +373,149 @@ public class MainActivity {
 </html>
 ```
 
+## Hybrid Example(iOS)
+> iOS에서는 아래와 같이 "WKUserContentController"와 "WKWebView evaluateJavaScript"를 이용하여 데이터를 주고 받을 수 있습니다.
+> 
+> Javascript -> Webview 호출은 단방향입니다.  
+> Webview -> Javascript 호출은 양방향입니다.  
+> 
+> Javascript에서 Webview의 값을 받으려면 호출될 함수(리시브) 설정이 필요합니다.
+
+### 1. Webview -> Javascript
+#### 1-1. Webview -> Javascript 호출 방법 1번 (문서 로드 시작시, 문서 로드 종료시 실행할 WKUserScript 설정)
+```
+WKWebViewConfiguration *webviewConfiguration = [[WKWebViewConfiguration alloc] init];
+WKUserContentController *userContentController = [[WKUserContentController alloc] init];
+
+// 호출할 Javascript 함수와 데이터 설정
+// WKUserScriptInjectionTimeAtDocumentStart (문서 로드 시작시)
+// WKUserScriptInjectionTimeAtDocumentEnd (문서 로드 종료시)
+WKUserScript *userScript = [[WKUserScript alloc] initWithSource:[NSString stringWithFormat:@"FunctionName('%@')", @"Data"] injectionTime:WKUserScriptInjectionTimeAtDocumentEnd forMainFrameOnly:YES];
+
+// 호출할 WKUserScript 추가
+[userContentController addUserScript:userScript];
+
+[webviewConfiguration setUserContentController:userContentController];
+    
+self.webView = [[WKWebView alloc] initWithFrame:self.view.frame configuration:webviewConfiguration];
+```
+
+
+#### 1-2. Webview -> Javascript 호출 방법 2번 (필요할때 WKWebView evaluateJavaScript 호출)
+```
+[self.webView evaluateJavaScript:[NSString stringWithFormat:@"FunctionName('%@')", @"Data"] completionHandler:^(id result, NSError *error) {
+    if (error != nil) {    // evaluateJavaScript 에러
+        NSLog(@"evaluateJavaScript Error : %@", error.localizedDescription);
+    } else if (result != nil){    // evaluateJavaScript 성공 및 응답값
+        NSLog(@"evaluateJavaScript Success Result : %@", [NSString stringWithFormat:@"%@", result]);
+    }
+}];
+```
+
+### 2. Javascript -> Webview
+#### 2-1. Javascript -> Webview 호출 (WKUserContentController 설정)
+```
+self.postMessageInterface = [[PostMessageInterface alloc] init];    // PostMessageInterface 생성(커스텀 클래스)
+
+WKWebViewConfiguration *webviewConfiguration = [[WKWebViewConfiguration alloc] init];
+WKUserContentController *userContentController = [[WKUserContentController alloc] init];
+
+// 웹이 호출할 메시지 핸들러 추가
+[userContentController addScriptMessageHandler:self name:@"HandlerName"];
+
+// 설정한 WKUserContentController를 WKWebViewConfiguration에 설정
+[webviewConfiguration setUserContentController:userContentController];
+    
+// 설정 정보를 WKWebView에 적용하여 웹뷰 생성
+self.webView = [[WKWebView alloc] initWithFrame:self.view.frame configuration:webviewConfiguration];
+```
+
+
+
+#### 2-2. Javascript -> Webview 호출 WKScriptMessageHandler Delegate 설정 (호출에 대한 리시브 설정 및 예시)
+> WKUserContentController에 핸들러를 등록하지 않으면 응답받지 않음
+
+```
+@interface ViewController () <WKScriptMessageHandler>
+
+- (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message {
+    // message.name = 핸들러 네임
+    // message.body = 전달받은 메시지
+    NSLog(@"----- didReceiveScriptMessage: %@ | %@", message.name, message.body);
+
+    // 처리 예시
+    // 참고만 해주세요
+    if ([message.name isEqualToString:@"HandlerName"]) {
+        
+        SEL selector = NSSelectorFromString(message.body);
+
+        // PostMessageInterface에서 제공하는 함수가 있는지 확인
+        if ([self.postMessageInterface respondsToSelector:selector]) {
+            
+            // Webview -> Javascript 호출 (completionHandler = nil 가능)
+            // [self.postMessageInterface performSelector:selector]
+            [self.webView evaluateJavaScript:[NSString stringWithFormat:@"FunctionName2('%@', '%@')", message.body, [self.postMessageInterface performSelector:selector]] completionHandler:^(id result, NSError *error) {
+                if (error != nil) {    // evaluateJavaScript 에러
+                    NSLog(@"evaluateJavaScript Error : %@", error.localizedDescription);
+                } else if (result != nil){    // evaluateJavaScript 성공 및 결과
+                    NSLog(@"evaluateJavaScript Success Result : %@", [NSString stringWithFormat:@"%@", result]);
+                }
+            }];
+
+        }
+    }
+}
+```
+
+### 3. PostMessageInterface 설정
+```
+@interface PostMessageInterface : NSObject
+
+- (NSString *)getIfa;
+- (BOOL)isCoppa;
+- (BOOL)hasYob;
+- (NSString *)getYob;
+- (BOOL)hasGender;
+- (NSString *)getGender;
+- (BOOL)hasSegment;
+- (NSDictionary *)getSegment;
+- (BOOL)hasMobileCountryCode;
+- (NSString *)getMobileCountryCode;
+- (BOOL)hasMobileNetworkCode;
+- (NSString *)getMobileNetworkCode;
+- (BOOL)hasCountryIso;
+- (NSString *)getCountryIso;
+- (BOOL)hasDeviceModel;
+- (NSString *)getDeviceModel;
+- (BOOL)hasDeviceMake;
+- (NSString *)getDeviceMake;
+- (BOOL)hasOsVersion;
+- (NSString *)getOsVersion;
+- (BOOL)hasAppVersion;
+- (NSString *)getAppVersion;
+- (BOOL)hasOsGeo;
+- (NSString *)getOsLat;
+- (NSString *)getOsLon;
+
+@end
+```
+
+### 4. Javascript에서 window.webkit.messageHandlers 호출 (단방향)
+```
+if (window.webkit && window.webkit.messageHandlers) {
+    window.webkit.messageHandlers.HandlerName.postMessage("Message");
+}
+
+// Webview에서 호출할 함수 선언
+function FunctionName(data) {
+    console.log(data);
+}
+
+function FunctionName2(data1, data2) {
+    console.log(data1, data2);
+}
+```
+
 ## NATIVE MOBILE WEB
 > MOBILE WEB 지면에서 NATIVE 광고를 적용 할 때<br>
 
