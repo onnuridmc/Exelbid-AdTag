@@ -244,32 +244,38 @@ public class MainActivity {
                 .setResponseCallback(MyResponse)
                 .setIsInApp(true); // 이것은 특별히 inapp 인 경우 반드시 해줘야 합니다. 
 
-            adunit.setIfa(mysdk.getIfa()); // ifa(gaid or idfa) 가 없는 경우는 입찰이 거의 들어오지 않습니다.
+            if( typeof mysdk === 'undefined' )
+            {
+                console.log("error occured in mysdk object");
+            }else 
+            {
+                adunit.setIfa(mysdk.getIfa()); // ifa(gaid or idfa) 가 없는 경우는 입찰이 거의 들어오지 않습니다.
 
-            if (mysdk.isCoppa())
-                adunit.setCoppa(true);
-            if (mysdk.hasYob()) // ex) 1990
-                adunit.setYob(mysdk.getYob());
-            if (mysdk.hasGender()) // ex) F, M
-                adunit.setGender(mysdk.getGender());
-            if (mysdk.hasSegment()) // ex) seg1, 0012
-                adunit.addKeyword(mysdk.getSegmentKey(), mysdk.getSegmentValue());
-            if (mysdk.hasMobileCountryCode()) // ex 450
-                adunit.setMobileCountryCode(mysdk.getMobileCountryCode());
-            if (mysdk.hasMobileNetworkCode()) // ex 05
-                adunit.setMobileNetworkCode(mysdk.getMobileNetworkCode());
-            if (mysdk.hasCountryIso()) // ex kr
-                adunit.setCountryIso(mysdk.getCountryIso());
-            if (mysdk.hasDeviceModel()) // ex SM-N920K
-                adunit.setDeviceModel(mysdk.getDeviceModel());
-            if (mysdk.hasDeviceMake()) // ex LGE
-                adunit.setDeviceMake(mysdk.getDeviceMake());
-            if (mysdk.hasOsVersion()) // ex 7.0.1
-                adunit.setOsVersion(mysdk.getOsVersion());
-            if (mysdk.hasAppVersion()) // ex 1.0.2
-                adunit.setAppVersion(mysdk.getAppVersion());
-            if (mysdk.hasGeo()) // ex 37.01, 127.501
-                adunit.setGeo(mysdk.getLat(), mysdk.getLon());
+                if (mysdk.isCoppa())
+                    adunit.setCoppa(true);
+                if (mysdk.hasYob()) // ex) 1990
+                    adunit.setYob(mysdk.getYob());
+                if (mysdk.hasGender()) // ex) F, M
+                    adunit.setGender(mysdk.getGender());
+                if (mysdk.hasSegment()) // ex) seg1, 0012
+                    adunit.addKeyword(mysdk.getSegmentKey(), mysdk.getSegmentValue());
+                if (mysdk.hasMobileCountryCode()) // ex 450
+                    adunit.setMobileCountryCode(mysdk.getMobileCountryCode());
+                if (mysdk.hasMobileNetworkCode()) // ex 05
+                    adunit.setMobileNetworkCode(mysdk.getMobileNetworkCode());
+                if (mysdk.hasCountryIso()) // ex kr
+                    adunit.setCountryIso(mysdk.getCountryIso());
+                if (mysdk.hasDeviceModel()) // ex SM-N920K
+                    adunit.setDeviceModel(mysdk.getDeviceModel());
+                if (mysdk.hasDeviceMake()) // ex LGE
+                    adunit.setDeviceMake(mysdk.getDeviceMake());
+                if (mysdk.hasOsVersion()) // ex 7.0.1
+                    adunit.setOsVersion(mysdk.getOsVersion());
+                if (mysdk.hasAppVersion()) // ex 1.0.2
+                    adunit.setAppVersion(mysdk.getAppVersion());
+                if (mysdk.hasOsGeo()) // ex 37.01, 127.501
+                    adunit.hasOsGeo(mysdk.getOsLat(), mysdk.getOsLon());
+            }
         });
     </script>
         <!--
@@ -328,32 +334,38 @@ public class MainActivity {
                 .setResponseCallback(MyResponse)
                 .setIsInApp(true); // 이것은 특별히 inapp 인 경우 반드시 해줘야 합니다. 
 
-            adunit.setIfa(mysdk.getIfa()); // ifa(gaid or idfa) 가 없는 경우는 입찰이 거의 들어오지 않습니다.
+            if( typeof mysdk === 'undefined' )
+            {
+                console.log("error occured in mysdk object");
+            }else 
+            {
+                adunit.setIfa(mysdk.getIfa()); // ifa(gaid or idfa) 가 없는 경우는 입찰이 거의 들어오지 않습니다.
 
-            if (mysdk.isCoppa())
-                adunit.setCoppa(true);
-            if (mysdk.hasYob()) // ex) 1990
-                adunit.setYob(mysdk.getYob());
-            if (mysdk.hasGender()) // ex) F, M
-                adunit.setGender(mysdk.getGender());
-            if (mysdk.hasSegment()) // ex) seg1, 0012
-                adunit.addKeyword(mysdk.getSegmentKey(), mysdk.getSegmentValue());
-            if (mysdk.hasMobileCountryCode()) // ex 450
-                adunit.setMobileCountryCode(mysdk.getMobileCountryCode());
-            if (mysdk.hasMobileNetworkCode()) // ex 05
-                adunit.setMobileNetworkCode(mysdk.getMobileNetworkCode());
-            if (mysdk.hasCountryIso()) // ex kr
-                adunit.setCountryIso(mysdk.getCountryIso());
-            if (mysdk.hasDeviceModel()) // ex SM-N920K
-                adunit.setDeviceModel(mysdk.getDeviceModel());
-            if (mysdk.hasDeviceMake()) // ex LGE
-                adunit.setDeviceMake(mysdk.getDeviceMake());
-            if (mysdk.hasOsVersion()) // ex 7.0.1
-                adunit.setOsVersion(mysdk.getOsVersion());
-            if (mysdk.hasAppVersion()) // ex 1.0.2
-                adunit.setAppVersion(mysdk.getAppVersion());
-            if (mysdk.hasGeo()) // ex 37.01, 127.501
-                adunit.setGeo(mysdk.getLat(), mysdk.getLon());
+                if (mysdk.isCoppa())
+                    adunit.setCoppa(true);
+                if (mysdk.hasYob()) // ex) 1990
+                    adunit.setYob(mysdk.getYob());
+                if (mysdk.hasGender()) // ex) F, M
+                    adunit.setGender(mysdk.getGender());
+                if (mysdk.hasSegment()) // ex) seg1, 0012
+                    adunit.addKeyword(mysdk.getSegmentKey(), mysdk.getSegmentValue());
+                if (mysdk.hasMobileCountryCode()) // ex 450
+                    adunit.setMobileCountryCode(mysdk.getMobileCountryCode());
+                if (mysdk.hasMobileNetworkCode()) // ex 05
+                    adunit.setMobileNetworkCode(mysdk.getMobileNetworkCode());
+                if (mysdk.hasCountryIso()) // ex kr
+                    adunit.setCountryIso(mysdk.getCountryIso());
+                if (mysdk.hasDeviceModel()) // ex SM-N920K
+                    adunit.setDeviceModel(mysdk.getDeviceModel());
+                if (mysdk.hasDeviceMake()) // ex LGE
+                    adunit.setDeviceMake(mysdk.getDeviceMake());
+                if (mysdk.hasOsVersion()) // ex 7.0.1
+                    adunit.setOsVersion(mysdk.getOsVersion());
+                if (mysdk.hasAppVersion()) // ex 1.0.2
+                    adunit.setAppVersion(mysdk.getAppVersion());
+                if (mysdk.hasOsGeo()) // ex 37.01, 127.501
+                    adunit.hasOsGeo(mysdk.getOsLat(), mysdk.getOsLon());
+            }
         });
     </script>
 
