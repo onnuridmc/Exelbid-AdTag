@@ -148,7 +148,7 @@ setGeo |  | LAT_LONG_KEY (latitude,longitude) 위도, 경도 | setGeo('35.245622
  Android 에서는 아래와 같이 Javascriptinterface를 이용하여 webview와 Native 간에 데이터를 주고 받을 수 있습니다. 
 
 1. Javainterface 클래스를 구현
-### Javainterface 예제 
+### Javainterface 예제 [[Exelbid WebViewInterface 구현 예제 파일]](./sample/ExelbidWebViewInterface.java)
 ```java
 public class WebViewInterface {
  
@@ -182,9 +182,9 @@ public class WebViewInterface {
     @JavascriptInterface public String getOsVersion();
     @JavascriptInterface public boolean hasAppVersion();
     @JavascriptInterface public String getAppVersion();
-    @JavascriptInterface public boolean hasOsGeo();
-    @JavascriptInterfacepublic String getOsLat();
-    @JavascriptInterface public String getOsLon();
+    @JavascriptInterface public boolean hasGeo();
+    @JavascriptInterfacepublic String getLat();
+    @JavascriptInterface public String getLon();
 }
 ```
 2. Native(Activity)d의 WebView에 JavascriptInterface 연결 - WebViewInterface(Javascripinterface)를 'mysdk'라는 이름으로 연결
@@ -273,8 +273,8 @@ public class MainActivity {
                     adunit.setOsVersion(mysdk.getOsVersion());
                 if (mysdk.hasAppVersion()) // ex 1.0.2
                     adunit.setAppVersion(mysdk.getAppVersion());
-                if (mysdk.hasOsGeo()) // ex 37.01, 127.501
-                    adunit.hasOsGeo(mysdk.getOsLat(), mysdk.getOsLon());
+                if (mysdk.hasGeo()) // ex 37.01, 127.501
+                    adunit.hasGeo(mysdk.getLat(), mysdk.getLon());
             }
         });
     </script>
@@ -363,8 +363,8 @@ public class MainActivity {
                     adunit.setOsVersion(mysdk.getOsVersion());
                 if (mysdk.hasAppVersion()) // ex 1.0.2
                     adunit.setAppVersion(mysdk.getAppVersion());
-                if (mysdk.hasOsGeo()) // ex 37.01, 127.501
-                    adunit.hasOsGeo(mysdk.getOsLat(), mysdk.getOsLon());
+                if (mysdk.hasGeo()) // ex 37.01, 127.501
+                    adunit.hasGeo(mysdk.getLat(), mysdk.getLon());
             }
         });
     </script>
@@ -505,9 +505,9 @@ self.webView = [[WKWebView alloc] initWithFrame:self.view.frame configuration:we
 - (NSString *)getOsVersion;
 - (BOOL)hasAppVersion;
 - (NSString *)getAppVersion;
-- (BOOL)hasOsGeo;
-- (NSString *)getOsLat;
-- (NSString *)getOsLon;
+- (BOOL)hasGeo;
+- (NSString *)getLat;
+- (NSString *)getLon;
 
 @end
 ```
