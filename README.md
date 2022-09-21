@@ -656,10 +656,10 @@ HTML Template 설정
  <body>
    <div id='body'>
     <!--
-    onclick="adtagClickUrl();"
-    광고 클릭 트래킹 URL 호출시 해당 이벤트 적용
+    광고 클릭 트래킹 URL 사용할 경우 
+    id="useClickTrackingUrl" 를 추가, 하단 이벤트 리스너 추가 할 것
     -->
-     <a class='overlay' href='${CLICK_URL}' target='_blank' onclick="adtagClickUrl();"></a>
+     <a class='overlay' id="useClickTrackingUrl" href='${CLICK_URL}' target='_blank'></a>
      <div id='main_container'>
        <div id='icon_wrapper'>
          <img id='icon' src='${IMG_ICON}' />
@@ -685,10 +685,9 @@ HTML Template 설정
     
     <script type="text/javascript">
     /**
-     * adtagClickUrl 이벤트 적용시 해당 함수 추가
-     **/
-    function adtagClickUrl()
-    { 
+     * 광고 클릭 트래킹 URL 사용할 경우 해당 이벤트 리스너 추가 할 것
+     * */
+    document.getElementById("useClickTrackingUrl").addEventListener("click", function() {
         try{
             var clickTags = new Array();
             var imgObj = new Array();
@@ -701,7 +700,7 @@ HTML Template 설정
             }
         }
         catch(e){}
-    }
+    });
     </script>
  </body>
  
