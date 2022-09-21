@@ -655,7 +655,11 @@ HTML Template 설정
  
  <body>
    <div id='body'>
-     <a class='overlay' href='${CLICK_URL}' target='_blank'></a>
+    <!--
+    onclick="adtagClickUrl();"
+    광고 클릭 트래킹 URL 호출시 해당 함수 적용
+    -->
+     <a class='overlay' href='${CLICK_URL}' target='_blank' onclick="adtagClickUrl();"></a>
      <div id='main_container'>
        <div id='icon_wrapper'>
          <img id='icon' src='${IMG_ICON}' />
@@ -673,8 +677,28 @@ HTML Template 설정
      </div>
    </div>
    <script type='text/javascript'>
+     /**광고 impression을 위해 하단 스크립트는 필수로 삽입 되어야 합니다.
+      * */
      try{var tags = new Array();var imgs = new Array();tags=[${ADTAG_MACRO_IMPRESSION_TAGS}];for(var i = 0; i < tags.length; i++ ){imgs[i] = new Image();imgs[i].src = tags[i];}}catch(e){}
    </script>
+
+    <script type="text/javascript">
+    function adtagClickUrl()
+    { 
+        try{
+            var clickTags = new Array();
+            var imgObj = new Array();
+            clickTags=[${ADTAG_MACRO_CLICK_TAGS}];
+            
+            for(var i = 0; i < clickTags.length; i++ )
+            {
+                imgObj[i] = new Image();
+                imgObj[i].src = clickTags[i];
+            }
+        }
+        catch(e){}
+    }
+    </script>
  </body>
  
  </html>
