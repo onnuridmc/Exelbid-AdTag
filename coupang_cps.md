@@ -1,8 +1,8 @@
 # 쿠팡 파트너스 Tag 연동
 
-- ct_tagid : 이미 할당된것을 전달 줘야 합니다.  
-- ct_div_id : 광고를 넣을 div id 
-    - ct_div_id를 안 넣거나 빈 문자일경우 body에 넣도록 되어 있음. (빈 iframe 내부에서 코드를 실행할 경우는 ct_div_id를 안 넣으면 됨. )
+- **ct_tagid** : 운영팀에서 발행 전달. 
+- **ct_div_id** : 광고를 넣을 div id  
+ct_div_id를 안 넣거나 빈 문자일경우 body에 넣도록 되어 있음. (빈 iframe 내부에서 코드를 실행할 경우는 ct_div_id를 안 넣으면 됨. )
 
 ### 쿠팡 파트너스 추천 스크립트
 ~~~ javascript
