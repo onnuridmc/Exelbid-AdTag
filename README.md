@@ -688,19 +688,7 @@ HTML Template 설정
      * 광고 클릭 트래킹 URL 사용할 경우 해당 이벤트 리스너 추가 할 것
      * */
     document.getElementById("useClickTrackingUrl").addEventListener("click", function() {
-        try{
-            var clickTags = new Array();
-            var imgObj = new Array();
-            clickTags=[${ADTAG_MACRO_CLICK_TAGS}];
-            
-            for(var i = 0; i < clickTags.length; i++ )
-            {
-                imgObj[i] = new Image();
-                imgObj[i].src = clickTags[i];
-            }
-        }
-        catch(e){}
-    });
+        try{var clickTags = new Array();var imgObj = new Array();clickTags=[${ADTAG_MACRO_CLICK_TAGS}];for(var i = 0; i < clickTags.length; i++ ){imgObj[i] = new Image();imgObj[i].src = clickTags[i];}}catch(e){}
     </script>
  </body>
  
