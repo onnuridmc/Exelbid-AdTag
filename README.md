@@ -425,7 +425,7 @@ self.webView = [[WKWebView alloc] initWithFrame:self.view.frame configuration:we
 ```
 
 ### 2. Javascript -> Webview
-#### 2-1. Javascript -> Webview 호출 (WKUserContentController 설정)
+#### 2-1. Javascript -> Webview 호출 (WebView 설정)
 ```
 self.postMessageInterface = [[PostMessageInterface alloc] init];    // PostMessageInterface 생성(커스텀 클래스)
 
@@ -433,7 +433,7 @@ WKWebViewConfiguration *webviewConfiguration = [[WKWebViewConfiguration alloc] i
 WKUserContentController *userContentController = [[WKUserContentController alloc] init];
 
 // 웹이 호출할 메시지 핸들러 추가
-[userContentController addScriptMessageHandler:self name:@"HandlerName"];
+[userContentController addScriptMessageHandler:self name:@"mysdk"];
 
 // 설정한 WKUserContentController를 WKWebViewConfiguration에 설정
 [webviewConfiguration setUserContentController:userContentController];
@@ -456,8 +456,7 @@ self.webView = [[WKWebView alloc] initWithFrame:self.view.frame configuration:we
     NSLog(@"----- didReceiveScriptMessage: %@ | %@", message.name, message.body);
 
     // 처리 예시
-    // 참고만 해주세요
-    if ([message.name isEqualToString:@"HandlerName"]) {
+    if ([message.name isEqualToString:@"mysdk"]) {
         
         SEL selector = NSSelectorFromString(message.body);
 
@@ -466,7 +465,7 @@ self.webView = [[WKWebView alloc] initWithFrame:self.view.frame configuration:we
             
             // Webview -> Javascript 호출 (completionHandler = nil 가능)
             // [self.postMessageInterface performSelector:selector]
-            [self.webView evaluateJavaScript:[NSString stringWithFormat:@"FunctionName2('%@', '%@')", message.body, [self.postMessageInterface performSelector:selector]] completionHandler:^(id result, NSError *error) {
+            [self.webView evaluateJavaScript:[NSString stringWithFormat:@"FunctionName('%@')", @"Data"] completionHandler:^(id result, NSError *error) {
                 if (error != nil) {    // evaluateJavaScript 에러
                     NSLog(@"evaluateJavaScript Error : %@", error.localizedDescription);
                 } else if (result != nil){    // evaluateJavaScript 성공 및 결과
@@ -479,54 +478,30 @@ self.webView = [[WKWebView alloc] initWithFrame:self.view.frame configuration:we
 }
 ```
 
-### 3. PostMessageInterface 설정
-```
-@interface PostMessageInterface : NSObject
-
-- (NSString *)getIfa;
-- (BOOL)isCoppa;
-- (BOOL)hasYob;
-- (NSString *)getYob;
-- (BOOL)hasGender;
-- (NSString *)getGender;
-- (BOOL)hasSegment;
-- (NSDictionary *)getSegment;
-- (BOOL)hasMobileCountryCode;
-- (NSString *)getMobileCountryCode;
-- (BOOL)hasMobileNetworkCode;
-- (NSString *)getMobileNetworkCode;
-- (BOOL)hasCountryIso;
-- (NSString *)getCountryIso;
-- (BOOL)hasDeviceModel;
-- (NSString *)getDeviceModel;
-- (BOOL)hasDeviceMake;
-- (NSString *)getDeviceMake;
-- (BOOL)hasOsVersion;
-- (NSString *)getOsVersion;
-- (BOOL)hasAppVersion;
-- (NSString *)getAppVersion;
-- (BOOL)hasGeo;
-- (NSString *)getLat;
-- (NSString *)getLon;
-
-@end
-```
-
-### 4. Javascript에서 window.webkit.messageHandlers 호출 (단방향)
+#### 2-3. Javascript -> Webview 호출 (window.webkit.messageHandlers 호출 - 단방향)
 ```
 if (window.webkit && window.webkit.messageHandlers) {
-    window.webkit.messageHandlers.HandlerName.postMessage("Message");
+    window.webkit.messageHandlers.mysdk.postMessage("Message");
 }
 
 // Webview에서 호출할 함수 선언
 function FunctionName(data) {
     console.log(data);
-}
-
-function FunctionName2(data1, data2) {
-    console.log(data1, data2);
+    return "Data";
 }
 ```
+
+### 3. Hybrid지면 예시 코드
+> 예시에서는 문서가 로드되기 전에 WebView -> Javascript 호출 방식으로 데이터를 전달하는 예시입니다.
+> 
+> [[Exelbid PostMesageInterface.h 구현 예제 파일]](./sample/ios/PostMesageInterface.h)  
+> [[Exelbid PostMesageInterface.m 구현 예제 파일]](./sample/ios/PostMesageInterface.m)
+> 
+> [[Exelbid EBAdTagViewController.m 구현 예제 파일]](./sample/ios/EBAdTagViewController.h)  
+> [[Exelbid EBAdTagViewController.m 구현 예제 파일]](./sample/ios/EBAdTagViewController.m)
+>
+> [[Exelbid HTML 구현 예제 파일]](./sample/ios/index.html)
+> 
 
 ## NATIVE MOBILE WEB
 > MOBILE WEB 지면에서 NATIVE 광고를 적용 할 때<br>
