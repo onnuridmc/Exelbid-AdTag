@@ -493,12 +493,12 @@ function FunctionName(data) {
 
 ### 3. Hybrid지면 예시 코드
 > 예시에서는 문서가 로드되기 전에 WebView -> Javascript 호출 방식으로 데이터를 전달하는 예시입니다.
-> 
+>
 > [[Exelbid PostMesageInterface.h 구현 예제 파일]](./sample/ios/PostMesageInterface.h)  
 > [[Exelbid PostMesageInterface.m 구현 예제 파일]](./sample/ios/PostMesageInterface.m)
 > 
-> [[Exelbid EBAdTagViewController.m 구현 예제 파일]](./sample/ios/EBAdTagViewController.h)  
-> [[Exelbid EBAdTagViewController.m 구현 예제 파일]](./sample/ios/EBAdTagViewController.m)
+> [[Exelbid AdTagViewController.m 구현 예제 파일]](./sample/ios/AdTagViewController.h)  
+> [[Exelbid AdTagViewController.m 구현 예제 파일]](./sample/ios/AdTagViewController.m)d
 >
 > [[Exelbid HTML 구현 예제 파일]](./sample/ios/index.html)
 > 
