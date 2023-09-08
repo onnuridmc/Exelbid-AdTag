@@ -29,6 +29,8 @@ Hybrid는 Channel->INAPP 으로 설정한다.<br>
     }(window,document,'script','//st2.exelbid.com/js/ads.js');
 </script>
 ```
+ads.js는 ***HTTPS 프로토콜*** 에서 동작합니다. 기타 다른 프로토콜에서 동작하지 않으니 스크립트 삽입 시 프로토콜을 확인해 주시길 바랍니다.
+
 > 광고 태그를 선언합니다.
 ```html
 <script type='text/javascript'>
@@ -81,6 +83,7 @@ setOsVersion |  | Android 또는 iOS의 os 버전 | setOsVersion('4.3.0')
 setAppVersion |  | 어플리케이션 버전 | setAppVersion('2.3.4')
 setGeo |  | LAT_LONG_KEY (latitude,longitude) 위도, 경도 | setGeo('35.2456226,128.9077138')
 
+
 ## Web Example
 > tagid : "abcdefg", width : 320, height : 50 이고 데이타 관련 함수를 전부 썼을때에는
 아래와 같습니다.
@@ -114,6 +117,7 @@ setGeo |  | LAT_LONG_KEY (latitude,longitude) 위도, 경도 | setGeo('35.245622
         
         /*
         // local passback 을 설정하면 서버의 설정이 무시됩니다.
+        // local passback 설정 시 광고가 Parent Node에 영향을 미치지 않도록 Iframe 내 Passback 호출을 권장드립니다.
         // Passback 함수 - setResponseCallback(ExelbidPassback_abcdefg)와 같이 설정
         function ExelbidPassback_abcdefg(){
             // TODO
@@ -142,7 +146,6 @@ setGeo |  | LAT_LONG_KEY (latitude,longitude) 위도, 경도 | setGeo('35.245622
 
 </html>
 ```
-
 ## Hybrid Example(Android)
 > Hybrid에서는 광고 아이디(gaid or idfa)등의 전달의 필요합니다.<br>
  Android 에서는 아래와 같이 Javascriptinterface를 이용하여 webview와 Native 간에 데이터를 주고 받을 수 있습니다. 
