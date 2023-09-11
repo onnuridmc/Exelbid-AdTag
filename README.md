@@ -26,7 +26,7 @@ Hybrid는 Channel->INAPP 으로 설정한다.<br>
         t.push = function() {t.callFunc?t.callFunc.apply(t,arguments) : t.cmd.push(arguments);};
         t.cmd=[];ss = document.createElement(s);ss.async=!0;ss.src=u;
         fs=d.getElementsByTagName(s)[0];fs.parentNode.insertBefore(ss,fs);
-    }(window,document,'script','//st2.exelbid.com/js/ads.js');
+    }(window,document,'script','https://st2.exelbid.com/js/ads.js');
 </script>
 ```
 ads.js는 ***HTTPS 프로토콜*** 에서 동작합니다. 기타 다른 프로토콜에서 동작하지 않으니 스크립트 삽입 시 프로토콜을 확인해 주시길 바랍니다.
@@ -83,7 +83,6 @@ setOsVersion |  | Android 또는 iOS의 os 버전 | setOsVersion('4.3.0')
 setAppVersion |  | 어플리케이션 버전 | setAppVersion('2.3.4')
 setGeo |  | LAT_LONG_KEY (latitude,longitude) 위도, 경도 | setGeo('35.2456226,128.9077138')
 
-
 ## Web Example
 > tagid : "abcdefg", width : 320, height : 50 이고 데이타 관련 함수를 전부 썼을때에는
 아래와 같습니다.
@@ -98,7 +97,7 @@ setGeo |  | LAT_LONG_KEY (latitude,longitude) 위도, 경도 | setGeo('35.245622
             t.push = function() {t.callFunc?t.callFunc.apply(t,arguments) : t.cmd.push(arguments);};
             t.cmd=[];ss = document.createElement(s);ss.async=!0;ss.src=u;
             fs=d.getElementsByTagName(s)[0];fs.parentNode.insertBefore(ss,fs);
-        }(window,document,'script','//st2.exelbid.com/js/ads.js');
+        }(window,document,'script','https://st2.exelbid.com/js/ads.js');
     </script>
 </head>
 
@@ -223,7 +222,7 @@ public class MainActivity {
             t.push = function() {t.callFunc?t.callFunc.apply(t,arguments) : t.cmd.push(arguments);};
             t.cmd=[];ss = document.createElement(s);ss.async=!0;ss.src=u;
             fs=d.getElementsByTagName(s)[0];fs.parentNode.insertBefore(ss,fs);
-        }(window,document,'script','//st2.exelbid.com/js/ads.js');
+        }(window,document,'script','https://st2.exelbid.com/js/ads.js');
     </script>
 </head>
 
@@ -313,7 +312,7 @@ public class MainActivity {
             t.push = function() {t.callFunc?t.callFunc.apply(t,arguments) : t.cmd.push(arguments);};
             t.cmd=[];ss = document.createElement(s);ss.async=!0;ss.src=u;
             fs=d.getElementsByTagName(s)[0];fs.parentNode.insertBefore(ss,fs);
-        }(window,document,'script','//st2.exelbid.com/js/ads.js');
+        }(window,document,'script','https://st2.exelbid.com/js/ads.js');
     </script>
 </head>
 
