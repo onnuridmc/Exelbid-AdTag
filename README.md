@@ -276,7 +276,7 @@ public class MainActivity {
                 if (mysdk.hasAppVersion()) // ex 1.0.2
                     adunit.setAppVersion(mysdk.getAppVersion());
                 if (mysdk.hasGeo()) // ex 37.01, 127.501
-                    adunit.hasGeo(mysdk.getLat(), mysdk.getLon());
+                    adunit.setGeo(mysdk.getLat(), mysdk.getLon());
             }
         });
     </script>
