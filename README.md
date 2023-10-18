@@ -495,15 +495,27 @@ function FunctionName(data) {
 
 ### 3. Hybrid지면 예시 코드
 > 예시에서는 문서가 로드되기 전에 WebView -> Javascript 호출 방식으로 데이터를 전달하는 예시입니다.
->
-> [[Exelbid PostMesageInterface.h 구현 예제 파일]](./sample/ios/PostMessageInterface.h)  
-> [[Exelbid PostMesageInterface.m 구현 예제 파일]](./sample/ios/PostMessageInterface.m)
 > 
-> [[Exelbid AdTagViewController.m 구현 예제 파일]](./sample/ios/AdTagViewController.h)  
-> [[Exelbid AdTagViewController.m 구현 예제 파일]](./sample/ios/AdTagViewController.m)
->
-> [[Exelbid HTML 구현 예제 파일]](./sample/ios/index.html)
 > 
+> 
+> 
+> info.plist - 위치 사용 설정 추가
+> ```
+> Privacy - Location Always and When In Use Usage Description
+> Privacy - Location When In Use Usage Description
+> ```
+>
+> info.plist - 광고식별자 사용 설정 추가
+> ```
+> Privacy - Tracking Usage Description
+> ```
+
+### 3-1. Objective C
+[[Exelbid PostMesageInterface.h 구현 예제 파일]](./sample/ios/PostMessageInterface.h)  
+[[Exelbid PostMesageInterface.m 구현 예제 파일]](./sample/ios/PostMessageInterface.m)  
+[[Exelbid AdTagViewController.m 구현 예제 파일]](./sample/ios/AdTagViewController.h)  
+[[Exelbid AdTagViewController.m 구현 예제 파일]](./sample/ios/AdTagViewController.m)  
+[[Exelbid HTML 구현 예제 파일]](./sample/ios/index.html)
 
 ## NATIVE MOBILE WEB
 > MOBILE WEB 지면에서 NATIVE 광고를 적용 할 때<br>
