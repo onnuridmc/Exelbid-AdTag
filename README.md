@@ -696,3 +696,198 @@ HTML Template 설정
 - ${OPTOUT_IMG} : OPTOUT IMAGE
 - ${CREATIVE_ID} : 소재 ID
 - ${CAMPAIGN_ID} : 캠페인 ID
+<br><br>
+
+
+# 광고 클릭 설정 가이드 (Android)
+
+광고 클릭 시, 클릭이 외부 브라우저로 동작하기 위해서는 다음과 같은 추가 설정이 필요합니다.
+
+1. `WebViewClient`의 `shouldOverrideUrlLoading` 메서드 Overriding 구현
+    
+    광고에 의한 페이지 이동은 외부 브라우저로 처리되도록 `shouldOverrideUrlLoading overriding 샘플코드`와 같은 로직을 구현해주세요.<br>
+    [샘플 코드의 'shouldOverrideUrlLoading' 참조](#샘플-코드)
+    
+2. `WebView` 의 `setSupportMultipleWindows` 세팅 true 인 경우도 구현된 새탭의 `WebViewClient`의 `shouldOverrideUrlLoading` 메서드 Overriding 구현로직을 구현해주세요.<br>
+    [샘플 코드의 'onCreateWindow'에서 새탭의 'shouldOverrideUrlLoading' 참조](#샘플-코드)
+
+    - `setSupportMultipleWindows` 를 true 설정하면 링크가 _blank로 동작할때 새탭으로 이동하려고 한다. <br>
+        이때 새탭에 대한 구현이 없다면 오류발생(클릭 반응 없음)
+     
+
+3. 광고에 대한 클릭 처리 로직(외부 브라우저 처리)<br>
+
+    [샘플 코드의 'onClickAd' 참조](#클릭-처리-코드)<br>
+
+    클릭 발생 시, 광고에 대한 클릭 처리 로직은 다음과 같습니다.
+
+    - 이동하는 url 이 매체의 컨텐츠 도메인(host) 혹은 스킴(scheme)인 경우
+        
+        - 매체 자체의 페이지 로직 혹은 default 세팅에 따라 동작
+
+        - 다음 예시와 같은 케이스를 매체의 컨텐츠 도메인으로 판단한다.
+        
+            ex) 매체의 컨텐츠 도메인이 mysite.com 이고, 이동할 url이 http://mysite.com/page.html 인 경우
+
+            이동하는 url host가 매체의 컨텐츠 도메인과 같으므로, 매체 자체의 페이지 로직에 따라 동작한다.
+        
+    - 이동하는 url 이 매체의 컨텐츠 도메인 혹은 스킴이 아닌 경우
+        
+        - 해당 url 이동을 광고로 인한 페이지 이동으로 판단하여, 외부 브라우저 처리
+
+        - 다음 예시와 같은 케이스를 광고로 판단한다.
+
+            ex) 매체의 컨텐츠 도메인이 mysite.com 이고, 이동할 url이 http://m.naver.com 또는 market://details?id=com.google.android.youtube 와 같이 외부 컨텐트인 경우
+
+            이동하는 url 을 매체의 컨텐츠가 아닌 광고로 인한 페이지 이동으로 판단하여, 외부 브라우저 처리한다.
+    
+
+## 샘플 코드
+
+```java
+public class MainActivity extends AppCompatActivity {
+
+  private WebView mWebView;
+
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+		
+		...
+
+		mWebView = new WebView(this);
+        WebSettings webSettings = mWebView.getSettings();
+		
+		//WebViewClient의 shouldOverrideUrlLoading 메서드를 재정의한다
+        mWebView.setWebViewClient(new WebViewClient(){
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                Context context = view.getContext();
+
+                // 1. 매체의 컨텐츠 도메인을 조회한다 (ex. "mysite.com")
+                String myHost = "mysite.com";
+
+                // 2. 이동하는 uri의 host를 조회한다
+                Uri uri = request.getUrl();
+                String host = uri.getHost();
+
+                // 3. 매체 컨텐츠인지 광고인지에 따라 클릭 처리
+                if (host.contains(myHost)) {
+                    // 3-1. 매체의 컨텐츠 도메인(host)인 경우: 매체 자체의 페이지 로직 혹은 디폴트 세팅에 따라 처리한다.
+                } else {
+                    // 3-2. 매체의 컨텐츠 도메인(host)이 아닌 경우: 광고로 판단하여 광고 클릭 처리(외부 브라우저 처리)를 시도한다.
+                    if(clickAd(context, uri)){
+                        // 광고 클릭 성공에 대한 처리
+                        return true;
+                    }
+                }
+
+                return super.shouldOverrideUrlLoading(view, request);
+            }
+        });
+
+        // `WebView` 의 `setSupportMultipleWindows` 세팅 true 인 경우
+        // 구현된 새탭의 WebViewClient의 shouldOverrideUrlLoading 메서드를 재정의한다 
+        mWebView.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public boolean onCreateWindow(WebView view, boolean isDialog, boolean isUserGesture, Message resultMsg) {
+                // 새로운 창을 띄울 시, 새로운 웹뷰를 정의한다.
+                WebView newWebView = new WebView(view.getContext());
+                WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
+                transport.setWebView(newWebView);
+                resultMsg.sendToTarget();
+
+                // 새로운 웹뷰에 대해 WebViewClient의 shouldOverrideUrlLoading 메서드를 재정의한다
+                newWebView.setWebViewClient(new WebViewClient() {
+                    @Override
+                    public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                        Context context = view.getContext();
+
+                        // 1. 매체의 컨텐츠 도메인을 조회한다 (ex. mysite.com)
+                        String myHost = "mysite.com";
+
+                        // 2. 이동하는 uri의 host를 조회한다
+                        Uri uri = request.getUrl();
+                        String host = uri.getHost();
+
+                        // 3. 매체 컨텐츠인지 광고인지에 따라 클릭 처리
+                        if (host.contains(myHost)) {
+                            // 3-1. 매체의 컨텐츠 도메인(host)인 경우: 매체 자체의 페이지 로직 혹은 디폴트 세팅에 따라 처리한다.
+                        } else {
+                            // 3-2. 매체의 컨텐츠 도메인(host)이 아닌 경우: 광고로 판단하여 광고 클릭 처리(외부 브라우저 처리)를 시도한다.
+                            if(clickAd(context, uri)){
+                                // 광고 클릭 성공에 대한 처리
+                                return true;
+                            }
+                        }
+
+                        //3-2. 매체의 컨텐츠 도메인(host)인 경우: 매체 자체의 페이지 로직 혹은 디폴트 세팅에 따라 처리한다.
+                        return super.shouldOverrideUrlLoading(view, request);
+                    }
+                });
+
+                return true;
+            }
+        });
+	}
+
+    private boolean clickAd(Context context, Uri uri){
+        // 클릭 처리 코드(광고 클릭에 대한 외부 브라우저 호출) 참조
+    }
+    
+}
+
+```
+
+
+## 클릭 처리 코드
+- 광고 클릭에 대한 외부 브라우저 호출
+- 광고 클릭 처리 함수(`clickAd`)구현 샘플 코드
+```java
+    // 광고 클릭 처리 함수 구현. 광고에 대한 페이지 이동은 외부 브라우저로 처리한다. (클릭 성공 시, true. 클릭 실패 시, false 반환)
+    private boolean clickAd(Context context, Uri uri){
+
+        Intent intent = null;
+
+        // 1. 실행 가능한 앱이 있으면 실행한다.
+        try {
+            intent = Intent.parseUri(uri.toString(), Intent.URI_INTENT_SCHEME);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // 2. 실행 가능한 앱이 없는 경우, intent 스킴이라면 이동할 대체 url을 생성한다. (fallback_url 혹은 market_url)
+        if(intent.getScheme().equalsIgnoreCase("intent")){
+            String fallbackUrl = intent.getStringExtra("browser_fallback_url");
+            if (!TextUtils.isEmpty(fallbackUrl)) {
+                // 2.1. fallback_url 있는 경우
+                uri = Uri.parse(fallbackUrl);
+            } else {
+                // 2.2. fallback_url 없는 경우
+                String targetPackage = intent.getPackage();
+                // 2.2.1. 패키지 정보도 없으면 클릭 실패 처리
+                if (TextUtils.isEmpty(targetPackage)) {
+                    return false;
+                }
+                // 2.2.2. 패키지 정보가 있으면 market_url 로 대체
+                String marketUrl = "market://details?id=" + targetPackage;
+                uri = Uri.parse(marketUrl);
+            }
+
+            // 3. fallback_url 혹은 market_url 로 다시 클릭을 시도한다. 실행 가능한 앱이 있으면 실행한다.
+            try {
+                intent = Intent.parseUri(uri.toString(), Intent.URI_INTENT_SCHEME);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        // 4. 클릭 실패 처리
+        return false;
+    }
+```
