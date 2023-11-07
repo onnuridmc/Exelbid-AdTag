@@ -755,30 +755,30 @@ public class MainActivity extends AppCompatActivity {
 		...
 
 		mWebView = new WebView(this);
-        WebSettings webSettings = mWebView.getSettings();
+		WebSettings webSettings = mWebView.getSettings();
 		
 		//WebViewClient의 shouldOverrideUrlLoading 메서드를 재정의한다
-        mWebView.setWebViewClient(new WebViewClient(){
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                Context context = view.getContext();
-
-                // 1. 매체의 컨텐츠 도메인을 조회한다 (ex. "mysite.com")
-                String myHost = "mysite.com";
-
-                // 2. 이동하는 uri의 host를 조회한다
-                Uri uri = request.getUrl();
-                String host = uri.getHost();
-
-                // 3. 매체 컨텐츠인지 광고인지에 따라 클릭 처리
-                if (host.contains(myHost)) {
-                    // 3-1. 매체의 컨텐츠 도메인(host)인 경우: 매체 자체의 페이지 로직 혹은 디폴트 세팅에 따라 처리한다.
-                } else {
-                    // 3-2. 매체의 컨텐츠 도메인(host)이 아닌 경우: 광고로 판단하여 광고 클릭 처리(외부 브라우저 처리)를 시도한다.
-                    if(clickAd(context, uri)){
-                        // 광고 클릭 성공에 대한 처리
-                        return true;
-                    }
+        	mWebView.setWebViewClient(new WebViewClient(){
+	    	@Override
+	    	public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+		    Context context = view.getContext();
+	
+		    // 1. 매체의 컨텐츠 도메인을 조회한다 (ex. "mysite.com")
+		    String myHost = "mysite.com";
+	
+	            // 2. 이동하는 uri의 host를 조회한다
+		    Uri uri = request.getUrl();
+		    String host = uri.getHost();
+	
+		    // 3. 매체 컨텐츠인지 광고인지에 따라 클릭 처리
+		    if (host.contains(myHost)) {
+	            	// 3-1. 매체의 컨텐츠 도메인(host)인 경우: 매체 자체의 페이지 로직 혹은 디폴트 세팅에 따라 처리한다.
+		    } else {
+		    	// 3-2. 매체의 컨텐츠 도메인(host)이 아닌 경우: 광고로 판단하여 광고 클릭 처리(외부 브라우저 처리)를 시도한다.
+		    if(clickAd(context, uri)){
+			// 광고 클릭 성공에 대한 처리
+			return true;
+		    }
                 }
 
                 return super.shouldOverrideUrlLoading(view, request);
