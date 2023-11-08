@@ -330,5 +330,5 @@ HTML Template 설정
  # 하이브리드 앱
 > 하이브리드 앱 설정은 os 별 가이드를 참고해주세요
 
-- [ANDROID 가이드](./android%20%EA%B0%80%EC%9D%B4%EB%93%9C.md) 
-- [iOS 가이드](./ios%20%EA%B0%80%EC%9D%B4%EB%93%9C.md)
+- [ANDROID 가이드](./%ED%95%98%EC%9D%B4%EB%B8%8C%EB%A6%AC%EB%93%9C%20ANDROID%20%EA%B0%80%EC%9D%B4%EB%93%9C.md) 
+- [iOS 가이드](./%ED%95%98%EC%9D%B4%EB%B8%8C%EB%A6%AC%EB%93%9C%20iOS%20%EA%B0%80%EC%9D%B4%EB%93%9C.md)
