@@ -656,6 +656,7 @@ HTML Template 설정
    <script type='text/javascript'>
      /**
       * 광고 impression을 위해 하단 스크립트는 필수로 삽입
+      * 아래의 스크립트가 없을 경우 노출 카운트 집계가 안됨으로, 필수적으로 있어야 함
       * */
      try{var tags = new Array();var imgs = new Array();tags=[${ADTAG_MACRO_IMPRESSION_TAGS}];for(var i = 0; i < tags.length; i++ ){imgs[i] = new Image();imgs[i].src = tags[i];}}catch(e){}
    </script>
@@ -682,5 +683,3 @@ HTML Template 설정
 - ${CTATEXT} : CTATEXT
 - ${OPTOUT_URL} : OPTOUT URL 
 - ${OPTOUT_IMG} : OPTOUT IMAGE
-- ${CREATIVE_ID} : 소재 ID
-- ${CAMPAIGN_ID} : 캠페인 ID
