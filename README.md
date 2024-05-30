@@ -667,6 +667,7 @@ HTML Template 설정
      * */
     document.getElementById("useClickTrackingUrl").addEventListener("click", function() {
         try{var clickTags = new Array();var imgObj = new Array();clickTags=[${ADTAG_MACRO_CLICK_TAGS}];for(var i = 0; i < clickTags.length; i++ ){imgObj[i] = new Image();imgObj[i].src = clickTags[i];}}catch(e){}
+    });        
     </script>
  </body>
  
