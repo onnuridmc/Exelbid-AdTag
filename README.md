@@ -86,6 +86,7 @@ setGeo |  | LAT_LONG_KEY (latitude,longitude) 위도, 경도 | setGeo('35.245622
 ## Web Example
 > tagid : "abcdefg", width : 320, height : 50 이고 데이타 관련 함수를 전부 썼을때에는
 아래와 같습니다.
+
 ```html
 <html>
 
@@ -150,242 +151,283 @@ setGeo |  | LAT_LONG_KEY (latitude,longitude) 위도, 경도 | setGeo('35.245622
  Android 에서는 아래와 같이 Javascriptinterface를 이용하여 webview와 Native 간에 데이터를 주고 받을 수 있습니다. 
 
 1. Javainterface 클래스를 구현
-### Javainterface 예제 [[Exelbid WebViewInterface 구현 예제 파일]](./sample/ExelbidWebViewInterface.java)
-```java
-public class WebViewInterface {
- 
-    private WebView mAppView;
-    private Activity mContext;
- 
-    public WebViewInterface(Activity activity, WebView view) {
-        mAppView = view;
-        mContext = activity;
-    }
+    ### Javainterface 예제 [[Exelbid WebViewInterface 구현 예제 파일]](./sample/ExelbidWebViewInterface.java)
+    ```java
+    public class WebViewInterface {
 
-    @JavascriptInterface public String getIfa();
-    @JavascriptInterface public boolean isCoppa();
-    @JavascriptInterface public boolean hasYob();
-    @JavascriptInterface public String getYob();
-    @JavascriptInterface public boolean hasGender();
-    @JavascriptInterface public String getGender();
-    @JavascriptInterface public boolean hasSegment();
-    @JavascriptInterface public Map<String, String> getSegment();
-    @JavascriptInterface public boolean hasMobileCountryCode();
-    @JavascriptInterface public String getMobileCountryCode();
-    @JavascriptInterface public boolean hasMobileNetworkCode();
-    @JavascriptInterface public String getMobileNetworkCode();
-    @JavascriptInterface public boolean hasCountryIso();
-    @JavascriptInterface public String getCountryIso();
-    @JavascriptInterface public boolean hasDeviceModel();
-    @JavascriptInterface public String getDeviceModel();
-    @JavascriptInterface public boolean hasDeviceMake();
-    @JavascriptInterface public String getDeviceMake(;
-    @JavascriptInterface public boolean hasOsVersion();
-    @JavascriptInterface public String getOsVersion();
-    @JavascriptInterface public boolean hasAppVersion();
-    @JavascriptInterface public String getAppVersion();
-    @JavascriptInterface public boolean hasGeo();
-    @JavascriptInterfacepublic String getLat();
-    @JavascriptInterface public String getLon();
-}
-```
+        private WebView mAppView;
+        private Activity mContext;
+
+        public WebViewInterface(Activity activity, WebView view) {
+            mAppView = view;
+            mContext = activity;
+        }
+
+        @JavascriptInterface public String getIfa();
+        @JavascriptInterface public boolean isCoppa();
+        @JavascriptInterface public boolean hasYob();
+        @JavascriptInterface public String getYob();
+        @JavascriptInterface public boolean hasGender();
+        @JavascriptInterface public String getGender();
+        @JavascriptInterface public boolean hasSegment();
+        @JavascriptInterface public Map<String, String> getSegment();
+        @JavascriptInterface public boolean hasMobileCountryCode();
+        @JavascriptInterface public String getMobileCountryCode();
+        @JavascriptInterface public boolean hasMobileNetworkCode();
+        @JavascriptInterface public String getMobileNetworkCode();
+        @JavascriptInterface public boolean hasCountryIso();
+        @JavascriptInterface public String getCountryIso();
+        @JavascriptInterface public boolean hasDeviceModel();
+        @JavascriptInterface public String getDeviceModel();
+        @JavascriptInterface public boolean hasDeviceMake();
+        @JavascriptInterface public String getDeviceMake(;
+        @JavascriptInterface public boolean hasOsVersion();
+        @JavascriptInterface public String getOsVersion();
+        @JavascriptInterface public boolean hasAppVersion();
+        @JavascriptInterface public String getAppVersion();
+        @JavascriptInterface public boolean hasGeo();
+        @JavascriptInterfacepublic String getLat();
+        @JavascriptInterface public String getLon();
+    }
+    ```
+
 2. Native(Activity)d의 WebView에 JavascriptInterface 연결 - WebViewInterface(Javascripinterface)를 'mysdk'라는 이름으로 연결
-```java
-public class MainActivity {
- 
-    private WebView mWebView = null;
-    private WebViewInterface mWebViewInterface;
- 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getWindow().requestFeature(Window.FEATURE_PROGRESS);
-        setContentView(R.layout.activity_main);
-        mWebView = (WebView) findViewById(R.id.webview); //웹뷰 객체
-        mWebViewInterface = new WebViewInterface(MainActivity.this, mWebView); //JavascriptInterface 객체화
-        mWebView.addJavascriptInterface(mWebViewInterface, "mysdk"); //웹뷰에 JavascriptInterface를 연결
+    ```java
+    public class MainActivity {
+    
+        private WebView mWebView = null;
+        private WebViewInterface mWebViewInterface;
+    
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            getWindow().requestFeature(Window.FEATURE_PROGRESS);
+            setContentView(R.layout.activity_main);
+            mWebView = (WebView) findViewById(R.id.webview); //웹뷰 객체
+            mWebViewInterface = new WebViewInterface(MainActivity.this, mWebView); //JavascriptInterface 객체화
+            mWebView.addJavascriptInterface(mWebViewInterface, "mysdk"); //웹뷰에 JavascriptInterface를 연결
+        }
     }
-}
-```
-3-1. Hybrid지면의 영역이 고정값(불변값)인 경우
- - width, height 값이 고정값(px)인 경우 javascriptinterface를 이용하여 데이타 관련 함수를 전부 썼을때에는 아래와 같습니다.
+    ```
+3. Hybrid지면의 영역이 고정값(불변값)인 경우
+    - width, height 값이 고정값(px)인 경우 javascriptinterface를 이용하여 데이타 관련 함수를 전부 썼을때에는 아래와 같습니다.
 
-- ex) tagid : "abcdefg", width : 320px, height : 50px
-```html
-<html>
+    - ex) tagid : "abcdefg", width : 320px, height : 50px
+    ```html
+    <html>
 
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <script type='text/javascript'>
-          !function (w,d,s,u,t,ss,fs) {
-            if(w.exelbidtag)return;t=w.exelbidtag={};if(!window.t) window.t = t;
-            t.push = function() {t.callFunc?t.callFunc.apply(t,arguments) : t.cmd.push(arguments);};
-            t.cmd=[];ss = document.createElement(s);ss.async=!0;ss.src=u;
-            fs=d.getElementsByTagName(s)[0];fs.parentNode.insertBefore(ss,fs);
-        }(window,document,'script','https://st2.exelbid.com/js/ads.js');
-    </script>
-</head>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <script type='text/javascript'>
+            !function (w,d,s,u,t,ss,fs) {
+                if(w.exelbidtag)return;t=w.exelbidtag={};if(!window.t) window.t = t;
+                t.push = function() {t.callFunc?t.callFunc.apply(t,arguments) : t.cmd.push(arguments);};
+                t.cmd=[];ss = document.createElement(s);ss.async=!0;ss.src=u;
+                fs=d.getElementsByTagName(s)[0];fs.parentNode.insertBefore(ss,fs);
+            }(window,document,'script','https://st2.exelbid.com/js/ads.js');
+        </script>
+    </head>
 
-<body>
-    <script type='text/javascript'>
-        function MyResponse(result) {
-            // alert('status :' + status);
-            if (result.status == 'OK') {
-                //TODO 광고 처리 됨
-            } else if (result.status == 'NOBID') {
-                //TODO 광고없음
-            } else if (result.status == 'PASSBACK') {
-                //TODO PASSBACK
-            } else if (result.status == 'ERROR') {
-                //TODO 기타 에러
-            }
-        };
+    <body>
+        <script type='text/javascript'>
+            function MyResponse(result) {
+                // alert('status :' + status);
+                if (result.status == 'OK') {
+                    //TODO 광고 처리 됨
+                } else if (result.status == 'NOBID') {
+                    //TODO 광고없음
+                } else if (result.status == 'PASSBACK') {
+                    //TODO PASSBACK
+                } else if (result.status == 'ERROR') {
+                    //TODO 기타 에러
+                }
+            };
 
-        exelbidtag.push(function () {
-            var adunit = exelbidtag.initAdBanner('abcdefg', 320, 50, 'div-exelbid-abcdefg')
-                .setResponseCallback(MyResponse)
-                .setIsInApp(true); // 이것은 특별히 inapp 인 경우 반드시 해줘야 합니다. 
+            exelbidtag.push(function () {
+                var adunit = exelbidtag.initAdBanner('abcdefg', 320, 50, 'div-exelbid-abcdefg')
+                    .setResponseCallback(MyResponse)
+                    .setIsInApp(true); // 이것은 특별히 inapp 인 경우 반드시 해줘야 합니다. 
 
-            if( typeof mysdk === 'undefined' )
-            {
-                console.log("error occured in mysdk object");
-            }else 
-            {
-                adunit.setIfa(mysdk.getIfa()); // ifa(gaid or idfa) 가 없는 경우는 입찰이 거의 들어오지 않습니다.
+                if( typeof mysdk === 'undefined' )
+                {
+                    console.log("error occured in mysdk object");
+                }else 
+                {
+                    adunit.setIfa(mysdk.getIfa()); // ifa(gaid or idfa) 가 없는 경우는 입찰이 거의 들어오지 않습니다.
 
-                if (mysdk.isCoppa())
-                    adunit.setCoppa(true);
-                if (mysdk.hasYob()) // ex) 1990
-                    adunit.setYob(mysdk.getYob());
-                if (mysdk.hasGender()) // ex) F, M
-                    adunit.setGender(mysdk.getGender());
-                if (mysdk.hasSegment()) // ex) seg1, 0012
-                    adunit.addKeyword(mysdk.getSegmentKey(), mysdk.getSegmentValue());
-                if (mysdk.hasMobileCountryCode()) // ex 450
-                    adunit.setMobileCountryCode(mysdk.getMobileCountryCode());
-                if (mysdk.hasMobileNetworkCode()) // ex 05
-                    adunit.setMobileNetworkCode(mysdk.getMobileNetworkCode());
-                if (mysdk.hasCountryIso()) // ex kr
-                    adunit.setCountryIso(mysdk.getCountryIso());
-                if (mysdk.hasDeviceModel()) // ex SM-N920K
-                    adunit.setDeviceModel(mysdk.getDeviceModel());
-                if (mysdk.hasDeviceMake()) // ex LGE
-                    adunit.setDeviceMake(mysdk.getDeviceMake());
-                if (mysdk.hasOsVersion()) // ex 7.0.1
-                    adunit.setOsVersion(mysdk.getOsVersion());
-                if (mysdk.hasAppVersion()) // ex 1.0.2
-                    adunit.setAppVersion(mysdk.getAppVersion());
-                if (mysdk.hasGeo()) // ex 37.01, 127.501
-                    adunit.hasGeo(mysdk.getLat(), mysdk.getLon());
-            }
-        });
-    </script>
+                    if (mysdk.isCoppa())
+                        adunit.setCoppa(true);
+                    if (mysdk.hasYob()) // ex) 1990
+                        adunit.setYob(mysdk.getYob());
+                    if (mysdk.hasGender()) // ex) F, M
+                        adunit.setGender(mysdk.getGender());
+                    if (mysdk.hasSegment()) // ex) seg1, 0012
+                        adunit.addKeyword(mysdk.getSegmentKey(), mysdk.getSegmentValue());
+                    if (mysdk.hasMobileCountryCode()) // ex 450
+                        adunit.setMobileCountryCode(mysdk.getMobileCountryCode());
+                    if (mysdk.hasMobileNetworkCode()) // ex 05
+                        adunit.setMobileNetworkCode(mysdk.getMobileNetworkCode());
+                    if (mysdk.hasCountryIso()) // ex kr
+                        adunit.setCountryIso(mysdk.getCountryIso());
+                    if (mysdk.hasDeviceModel()) // ex SM-N920K
+                        adunit.setDeviceModel(mysdk.getDeviceModel());
+                    if (mysdk.hasDeviceMake()) // ex LGE
+                        adunit.setDeviceMake(mysdk.getDeviceMake());
+                    if (mysdk.hasOsVersion()) // ex 7.0.1
+                        adunit.setOsVersion(mysdk.getOsVersion());
+                    if (mysdk.hasAppVersion()) // ex 1.0.2
+                        adunit.setAppVersion(mysdk.getAppVersion());
+                    if (mysdk.hasGeo()) // ex 37.01, 127.501
+                        adunit.setGeo(mysdk.getLat(), mysdk.getLon());
+                }
+            });
+        </script>
+            <!--
+            #div-exelbid-abcdefg 의 영역이 광고 영역입니다.
+            div에 Height CSS 속성을 설정하지 마세요.
+            -->
+        <div id='div-exelbid-abcdefg' style="width: 320px;">
+            <script type='text/javascript'>
+                exelbidtag.push(function () {
+                    exelbidtag.loadAd('abcdefg');
+                });
+            </script>
+        </div>
+    </body>
+
+    </html>
+    ```
+
+4. Hybrid지면의 영역이 가변값인 경우
+    - width 값이 가변값(%)인 경우 javascriptinterface를 이용하여 데이타 관련 함수를 전부 썼을때에는 아래와 같습니다. &nbsp; 단, height값은 고정값으로 들어가야 합니다.
+
+    - ex) tagid : "abcdefg", width : 100%, height : 200px
+
+    ```html
+    <html>
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <script type='text/javascript'>
+            !function (w,d,s,u,t,ss,fs) {
+                if(w.exelbidtag)return;t=w.exelbidtag={};if(!window.t) window.t = t;
+                t.push = function() {t.callFunc?t.callFunc.apply(t,arguments) : t.cmd.push(arguments);};
+                t.cmd=[];ss = document.createElement(s);ss.async=!0;ss.src=u;
+                fs=d.getElementsByTagName(s)[0];fs.parentNode.insertBefore(ss,fs);
+            }(window,document,'script','https://st2.exelbid.com/js/ads.js');
+        </script>
+    </head>
+
+    <body>
+        <script type='text/javascript'>
+            function MyResponse(result) {
+                // alert('status :' + status);
+                if (result.status == 'OK') {
+                    //TODO 광고 처리 됨
+                } else if (result.status == 'NOBID') {
+                    //TODO 광고없음
+                } else if (result.status == 'PASSBACK') {
+                    //TODO PASSBACK
+                } else if (result.status == 'ERROR') {
+                    //TODO 기타 에러
+                }
+            };
+
+            exelbidtag.push(function () {
+                var adunit = exelbidtag.initAdBanner('abcdefg', '100%', 200, 'div-exelbid-abcdefg')
+                    .setResponseCallback(MyResponse)
+                    .setIsInApp(true); // 이것은 특별히 inapp 인 경우 반드시 해줘야 합니다. 
+
+                if( typeof mysdk === 'undefined' )
+                {
+                    console.log("error occured in mysdk object");
+                }else 
+                {
+                    adunit.setIfa(mysdk.getIfa()); // ifa(gaid or idfa) 가 없는 경우는 입찰이 거의 들어오지 않습니다.
+
+                    if (mysdk.isCoppa())
+                        adunit.setCoppa(true);
+                    if (mysdk.hasYob()) // ex) 1990
+                        adunit.setYob(mysdk.getYob());
+                    if (mysdk.hasGender()) // ex) F, M
+                        adunit.setGender(mysdk.getGender());
+                    if (mysdk.hasSegment()) // ex) seg1, 0012
+                        adunit.addKeyword(mysdk.getSegmentKey(), mysdk.getSegmentValue());
+                    if (mysdk.hasMobileCountryCode()) // ex 450
+                        adunit.setMobileCountryCode(mysdk.getMobileCountryCode());
+                    if (mysdk.hasMobileNetworkCode()) // ex 05
+                        adunit.setMobileNetworkCode(mysdk.getMobileNetworkCode());
+                    if (mysdk.hasCountryIso()) // ex kr
+                        adunit.setCountryIso(mysdk.getCountryIso());
+                    if (mysdk.hasDeviceModel()) // ex SM-N920K
+                        adunit.setDeviceModel(mysdk.getDeviceModel());
+                    if (mysdk.hasDeviceMake()) // ex LGE
+                        adunit.setDeviceMake(mysdk.getDeviceMake());
+                    if (mysdk.hasOsVersion()) // ex 7.0.1
+                        adunit.setOsVersion(mysdk.getOsVersion());
+                    if (mysdk.hasAppVersion()) // ex 1.0.2
+                        adunit.setAppVersion(mysdk.getAppVersion());
+                    if (mysdk.hasGeo()) // ex 37.01, 127.501
+                        adunit.hasGeo(mysdk.getLat(), mysdk.getLon());
+                }
+            });
+        </script>
+
         <!--
-        #div-exelbid-abcdefg 의 영역이 광고 영역입니다.
-        div에 Height CSS 속성을 설정하지 마세요.
+            #div-exelbid-abcdefg 의 영역이 광고 영역입니다.
+            div에 Height CSS 속성을 설정하지 마세요.
         -->
-    <div id='div-exelbid-abcdefg' style="width: 320px;">
-        <script type='text/javascript'>
-            exelbidtag.push(function () {
-                exelbidtag.loadAd('abcdefg');
-            });
-        </script>
-    </div>
-</body>
+        <div id='div-exelbid-abcdefg' style="width: 100%;">
+            <script type='text/javascript'>
+                exelbidtag.push(function () {
+                    exelbidtag.loadAd('abcdefg');
+                });
+            </script>
+        </div>
+    </body>
 
-</html>
-```
+    </html>
+    ```
 
-3-2. Hybrid지면의 영역이 가변값인 경우
- - width 값이 가변값(%)인 경우 javascriptinterface를 이용하여 데이타 관련 함수를 전부 썼을때에는 아래와 같습니다. &nbsp; 단, height값은 고정값으로 들어가야 합니다.
+5. Android Hybrid(WebApp)에서 클리 처리시 주의 사항 (앱 개발 환경에 따라 유연히 대처)
 
-- ex) tagid : "abcdefg", width : 100%, height : 200px
+- 외부 브라우저(팝업) 허용 필요 - 웹뷰 지면에 광고 적용시 해당 광고 클릭시 'target=_blank'로 동작 되어진다.
+    ```java
+    webSettings.setSupportMultipleWindows(true); // 새창 띄우기 허용
+    WebView.setWebChromeClient(new WebChromeClient() {
+        @Override
+        public boolean onCreateWindow(WebView view, boolean isDialog, boolean isUserGesture, android.os.Message resultMsg) {
+            // 사용자가 웹뷰에서 클릭한 정보를 획득
+            WebView.HitTestResult result = view.getHitTestResult();
+            // url 획득
+            String data = result.getExtra();
 
-```html
-<html>
+            // url을 open
+            Context context = view.getContext();
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(data));
+            context.startActivity(browserIntent);
+            return false;
+        }
+    });
+    ```
 
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <script type='text/javascript'>
-          !function (w,d,s,u,t,ss,fs) {
-            if(w.exelbidtag)return;t=w.exelbidtag={};if(!window.t) window.t = t;
-            t.push = function() {t.callFunc?t.callFunc.apply(t,arguments) : t.cmd.push(arguments);};
-            t.cmd=[];ss = document.createElement(s);ss.async=!0;ss.src=u;
-            fs=d.getElementsByTagName(s)[0];fs.parentNode.insertBefore(ss,fs);
-        }(window,document,'script','https://st2.exelbid.com/js/ads.js');
-    </script>
-</head>
+- shouldOverrideUrlLoading에서의 광고 클릭 처리 - 간혹 광고의 링크가 'target=_blank'로 동작 되지 않을경우, 또는 webSettings.setSupportMultipleWindows(false);로 설정해야 하는 경우 컨텐츠 url이 아닌 경우 외부 브라우저(팝업) 처리
 
-<body>
-    <script type='text/javascript'>
-        function MyResponse(result) {
-            // alert('status :' + status);
-            if (result.status == 'OK') {
-                //TODO 광고 처리 됨
-            } else if (result.status == 'NOBID') {
-                //TODO 광고없음
-            } else if (result.status == 'PASSBACK') {
-                //TODO PASSBACK
-            } else if (result.status == 'ERROR') {
-                //TODO 기타 에러
-            }
-        };
-
-        exelbidtag.push(function () {
-            var adunit = exelbidtag.initAdBanner('abcdefg', '100%', 200, 'div-exelbid-abcdefg')
-                .setResponseCallback(MyResponse)
-                .setIsInApp(true); // 이것은 특별히 inapp 인 경우 반드시 해줘야 합니다. 
-
-            if( typeof mysdk === 'undefined' )
-            {
-                console.log("error occured in mysdk object");
-            }else 
-            {
-                adunit.setIfa(mysdk.getIfa()); // ifa(gaid or idfa) 가 없는 경우는 입찰이 거의 들어오지 않습니다.
-
-                if (mysdk.isCoppa())
-                    adunit.setCoppa(true);
-                if (mysdk.hasYob()) // ex) 1990
-                    adunit.setYob(mysdk.getYob());
-                if (mysdk.hasGender()) // ex) F, M
-                    adunit.setGender(mysdk.getGender());
-                if (mysdk.hasSegment()) // ex) seg1, 0012
-                    adunit.addKeyword(mysdk.getSegmentKey(), mysdk.getSegmentValue());
-                if (mysdk.hasMobileCountryCode()) // ex 450
-                    adunit.setMobileCountryCode(mysdk.getMobileCountryCode());
-                if (mysdk.hasMobileNetworkCode()) // ex 05
-                    adunit.setMobileNetworkCode(mysdk.getMobileNetworkCode());
-                if (mysdk.hasCountryIso()) // ex kr
-                    adunit.setCountryIso(mysdk.getCountryIso());
-                if (mysdk.hasDeviceModel()) // ex SM-N920K
-                    adunit.setDeviceModel(mysdk.getDeviceModel());
-                if (mysdk.hasDeviceMake()) // ex LGE
-                    adunit.setDeviceMake(mysdk.getDeviceMake());
-                if (mysdk.hasOsVersion()) // ex 7.0.1
-                    adunit.setOsVersion(mysdk.getOsVersion());
-                if (mysdk.hasAppVersion()) // ex 1.0.2
-                    adunit.setAppVersion(mysdk.getAppVersion());
-                if (mysdk.hasGeo()) // ex 37.01, 127.501
-                    adunit.hasGeo(mysdk.getLat(), mysdk.getLon());
-            }
-        });
-    </script>
-
-    <!--
-        #div-exelbid-abcdefg 의 영역이 광고 영역입니다.
-        div에 Height CSS 속성을 설정하지 마세요.
-    -->
-    <div id='div-exelbid-abcdefg' style="width: 100%;">
-        <script type='text/javascript'>
-            exelbidtag.push(function () {
-                exelbidtag.loadAd('abcdefg');
-            });
-        </script>
-    </div>
-</body>
-
-</html>
-```
+    ```java
+    @Override
+    public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+        Uri url = request.getUrl();
+        String host = url.getHost();
+        if(!host.startsWith("{{컨텐츠 도메인}}")) {
+            // 해당 컨텐츠 도메인이 아닌 경우 위부 브라우저(팝업) 적용
+            Intent intent = new Intent(Intent.ACTION_VIEW, url);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            view.getContext().startActivity(intent);
+            return true;
+        }
+        return super.shouldOverrideUrlLoading(view, request);
+    }
+    ```
 
 ## Hybrid Example(iOS)
 > iOS에서는 아래와 같이 "WKUserContentController"와 "WKWebView evaluateJavaScript"를 이용하여 데이터를 주고 받을 수 있습니다.
@@ -397,7 +439,7 @@ public class MainActivity {
 
 ### 1. Webview -> Javascript
 #### 1-1. Webview -> Javascript 호출 방법 1번 (문서 로드 시작시, 문서 로드 종료시 실행할 WKUserScript 설정)
-```
+```swift
 WKWebViewConfiguration *webviewConfiguration = [[WKWebViewConfiguration alloc] init];
 WKUserContentController *userContentController = [[WKUserContentController alloc] init];
 
@@ -416,7 +458,7 @@ self.webView = [[WKWebView alloc] initWithFrame:self.view.frame configuration:we
 
 
 #### 1-2. Webview -> Javascript 호출 방법 2번 (필요할때 WKWebView evaluateJavaScript 호출)
-```
+```swift
 [self.webView evaluateJavaScript:[NSString stringWithFormat:@"FunctionName('%@')", @"Data"] completionHandler:^(id result, NSError *error) {
     if (error != nil) {    // evaluateJavaScript 에러
         NSLog(@"evaluateJavaScript Error : %@", error.localizedDescription);
@@ -428,7 +470,7 @@ self.webView = [[WKWebView alloc] initWithFrame:self.view.frame configuration:we
 
 ### 2. Javascript -> Webview
 #### 2-1. Javascript -> Webview 호출 (WebView 설정)
-```
+```swift
 self.postMessageInterface = [[PostMessageInterface alloc] init];    // PostMessageInterface 생성(커스텀 클래스)
 
 WKWebViewConfiguration *webviewConfiguration = [[WKWebViewConfiguration alloc] init];
@@ -449,7 +491,7 @@ self.webView = [[WKWebView alloc] initWithFrame:self.view.frame configuration:we
 #### 2-2. Javascript -> Webview 호출 WKScriptMessageHandler Delegate 설정 (호출에 대한 리시브 설정 및 예시)
 > WKUserContentController에 핸들러를 등록하지 않으면 응답받지 않음
 
-```
+```swift
 @interface ViewController () <WKScriptMessageHandler>
 
 - (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message {
@@ -481,7 +523,7 @@ self.webView = [[WKWebView alloc] initWithFrame:self.view.frame configuration:we
 ```
 
 #### 2-3. Javascript -> Webview 호출 (window.webkit.messageHandlers 호출 - 단방향)
-```
+```javascript
 if (window.webkit && window.webkit.messageHandlers) {
     window.webkit.messageHandlers.mysdk.postMessage("Message");
 }
