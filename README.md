@@ -389,7 +389,7 @@ setGeo |  | LAT_LONG_KEY (latitude,longitude) 위도, 경도 | setGeo('35.245622
     </html>
     ```
 
-5. Android Hybrid(WebApp)에서 클리 처리시 주의 사항 (앱 개발 환경에 따라 유연히 대처)
+5. Android Hybrid(WebApp)에서 클릭 처리시 주의 사항 (앱 개발 환경에 따라 유연히 대처)
 
 - 외부 브라우저(팝업) 허용 필요 - 웹뷰 지면에 광고 적용시 해당 광고 클릭시 'target=_blank'로 동작 되어진다.
     ```java
